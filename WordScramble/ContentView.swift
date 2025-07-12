@@ -16,6 +16,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var showingInfo = false
+    
     // MARK: - Computed Properties
     private var currentLanguage: String {
         Locale.current.language.languageCode?.identifier ?? "en"
@@ -23,6 +25,10 @@ struct ContentView: View {
     
     private var wordsFileName: String {
         currentLanguage == "ru" ? "start_ru" : "start"
+    }
+    
+    private var score: Int {
+        userWords.reduce(0) { $0 + $1.count }
     }
     
     var body: some View {
@@ -46,6 +52,32 @@ struct ContentView: View {
                 Button(NSLocalizedString("ok_button", comment: "OK button text")) {}
             } message: {
                 Text(errorMessage)
+            }
+            .sheet(isPresented: $showingInfo) {
+                InfoView()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: startGame) {
+                        Label(NSLocalizedString("new_game", comment: "New game button"), systemImage: "arrow.clockwise")
+                    }
+                }
+                
+                ToolbarItem(placement: .principal) {
+                    HStack {
+                        Image(systemName: "star.fill")
+                            .foregroundStyle(.yellow)
+                        Text("\(score)")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: showInfo) {
+                        Label(NSLocalizedString("info", comment: "Info button"), systemImage: "info.circle")
+                    }
+                }
             }
         }
     }
@@ -138,6 +170,10 @@ struct ContentView: View {
         errorTitle = title
         errorMessage = message
         showingError = true
+    }
+    
+    func showInfo() {
+        showingInfo = true
     }
 }
 

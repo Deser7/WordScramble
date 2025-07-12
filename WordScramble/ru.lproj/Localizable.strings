@@ -8,6 +8,10 @@
 "word_not_recognized_message" = "Нельзя просто придумывать слова!";
 "ok_button" = "OK";
 
+// MARK: - Toolbar
+"new_game" = "Новая игра";
+"info" = "Информация";
+
 // MARK: - Game Logic
 "default_root_word" = "спиридон";
 "could_not_load_file" = "Не удалось загрузить start.txt из бандла."; 

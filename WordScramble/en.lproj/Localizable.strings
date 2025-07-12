@@ -8,6 +8,10 @@
 "word_not_recognized_message" = "You can't just make them up, you know!";
 "ok_button" = "OK";
 
+// MARK: - Toolbar
+"new_game" = "New Game";
+"info" = "Info";
+
 // MARK: - Game Logic
 "default_root_word" = "spiridon";
 "could_not_load_file" = "Could not load start.txt from bundle."; 
