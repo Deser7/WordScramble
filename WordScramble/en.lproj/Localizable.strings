@@ -1,0 +1,13 @@
+// MARK: - UI Elements
+"enter_word" = "Enter your word";
+"word_used_already" = "Word used already";
+"be_more_original" = "Be more original!";
+"word_not_possible" = "Word not possible";
+"word_not_possible_message" = "You can't spell that word from %@!";
+"word_not_recognized" = "Word not recognized";
+"word_not_recognized_message" = "You can't just make them up, you know!";
+"ok_button" = "OK";
+
+// MARK: - Game Logic
+"default_root_word" = "spiridon";
+"could_not_load_file" = "Could not load start.txt from bundle."; 

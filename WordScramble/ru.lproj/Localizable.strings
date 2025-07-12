@@ -1,0 +1,13 @@
+// MARK: - UI Elements
+"enter_word" = "Введите слово";
+"word_used_already" = "Слово уже использовано";
+"be_more_original" = "Будь более оригинальной!";
+"word_not_possible" = "Слово невозможно составить";
+"word_not_possible_message" = "Нельзя составить это слово из %@!";
+"word_not_recognized" = "Слово не распознано";
+"word_not_recognized_message" = "Нельзя просто придумывать слова!";
+"ok_button" = "OK";
+
+// MARK: - Game Logic
+"default_root_word" = "спиридон";
+"could_not_load_file" = "Не удалось загрузить start.txt из бандла."; 

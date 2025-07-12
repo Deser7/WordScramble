@@ -16,11 +16,20 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    // MARK: - Computed Properties
+    private var currentLanguage: String {
+        Locale.current.language.languageCode?.identifier ?? "en"
+    }
+    
+    private var wordsFileName: String {
+        currentLanguage == "ru" ? "start_ru" : "start"
+    }
+    
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    TextField("Enter your word", text: $newWord)
+                    TextField(NSLocalizedString("enter_word", comment: "Placeholder for word input"), text: $newWord)
                         .textInputAutocapitalization(.never)
                 }
                 
@@ -34,13 +43,14 @@ struct ContentView: View {
             .onSubmit(addNewWord)
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
-                Button("OK") {}
+                Button(NSLocalizedString("ok_button", comment: "OK button text")) {}
             } message: {
                 Text(errorMessage)
             }
         }
     }
     
+    // MARK: - Game Logic
     func addNewWord() {
         let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         
@@ -48,24 +58,24 @@ struct ContentView: View {
         
         guard isOriginal(word: answer) else {
             wordError(
-                title: "Word used already",
-                message: "Be more oroginal!"
+                title: NSLocalizedString("word_used_already", comment: "Error when word is already used"),
+                message: NSLocalizedString("be_more_original", comment: "Message to be more original")
             )
             return
         }
         
         guard isPossible(word: answer) else {
             wordError(
-                title: "Word not possible",
-                message: "You can't spell that word from \(rootWord)!"
+                title: NSLocalizedString("word_not_possible", comment: "Error when word cannot be formed"),
+                message: String(format: NSLocalizedString("word_not_possible_message", comment: "Message when word cannot be formed from root word"), rootWord)
             )
             return
         }
         
         guard isReal(word: answer) else {
             wordError(
-                title: "Word not recognized",
-                message: "You can't just them up, you know!"
+                title: NSLocalizedString("word_not_recognized", comment: "Error when word is not recognized"),
+                message: NSLocalizedString("word_not_recognized_message", comment: "Message when word is not a real word")
             )
             return
         }
@@ -77,17 +87,19 @@ struct ContentView: View {
     }
     
     func startGame() {
-        if let startWordsURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
+        if let startWordsURL = Bundle.main.url(forResource: wordsFileName, withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordsURL, encoding: .utf8) {
-                let allWords = startWords.components(separatedBy: "\n")
-                rootWord = allWords.randomElement() ?? "spiridon"
+                let allWords = startWords.components(separatedBy: .newlines)
+                    .filter { !$0.isEmpty }
+                rootWord = allWords.randomElement() ?? NSLocalizedString("default_root_word", comment: "Default root word if file loading fails")
                 return
             }
         }
         
-        fatalError("Could not load start.txt from bundle.")
+        fatalError(NSLocalizedString("could_not_load_file", comment: "Error when start.txt cannot be loaded"))
     }
     
+    // MARK: - Validation Methods
     func isOriginal(word: String) -> Bool {
         !userWords.contains(word)
     }
@@ -102,7 +114,6 @@ struct ContentView: View {
                 return false
             }
         }
-        
         return true
     }
     
@@ -117,11 +128,12 @@ struct ContentView: View {
             range: range,
             startingAt: 0,
             wrap: false,
-            language: "en"
+            language: currentLanguage
         )
         return misspelledRange.location == NSNotFound
     }
     
+    // MARK: - Helper Methods
     func wordError(title: String, message: String) {
         errorTitle = title
         errorMessage = message
